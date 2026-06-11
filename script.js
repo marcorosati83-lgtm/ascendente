@@ -1,52 +1,49 @@
-import { Origin, Horoscope } from './astrology/src/index.js';
-
-console.log("Modulo astrologico caricato");
-
 let comuni = [];
 let comuneSelezionato = null;
 
-const cittaInput = document.getElementById('citta');
-const suggestions = document.getElementById('suggestions');
-const result = document.getElementById('result');
-const loader = document.getElementById('loader');
+const cittaInput = document.getElementById("citta");
+const suggestions = document.getElementById("suggestions");
+const result = document.getElementById("result");
 
-// =========================
-// CARICAMENTO COMUNI
-// =========================
-
-fetch('./data/elenco_comuni_italiani_con_stemma.geojson')
-  .then(res => res.json())
+fetch("./data/elenco_comuni_italiani_con_stemma.geojson")
+  .then(response => response.json())
   .then(data => {
+
     comuni = data.features || [];
+
     console.log("Comuni caricati:", comuni.length);
+
   })
-  .catch(err => {
-    console.error("Errore caricamento GeoJSON", err);
+  .catch(error => {
+
+    console.error(error);
+
   });
 
-// =========================
-// AUTOCOMPLETE COMUNI
-// =========================
+cittaInput.addEventListener("input", function () {
 
-cittaInput.addEventListener('input', function () {
+  const ricerca =
+    cittaInput.value.toLowerCase().trim();
 
-  const testo = cittaInput.value.toLowerCase().trim();
+  suggestions.innerHTML = "";
 
-  suggestions.innerHTML = '';
-
-  if (testo.length < 2) return;
+  if (ricerca.length < 2) return;
 
   const risultati = comuni
     .filter(function (c) {
-      return c.properties.comune.toLowerCase().includes(testo);
+
+      return c.properties.comune
+        .toLowerCase()
+        .includes(ricerca);
+
     })
     .slice(0, 15);
 
   risultati.forEach(function (comune) {
 
-    const div = document.createElement('div');
+    const div = document.createElement("div");
 
-    div.className = 'suggestion-item';
+    div.className = "suggestion-item";
 
     div.textContent =
       comune.properties.comune +
@@ -54,13 +51,14 @@ cittaInput.addEventListener('input', function () {
       comune.properties.sigla +
       ")";
 
-    div.addEventListener('click', function () {
+    div.addEventListener("click", function () {
 
       comuneSelezionato = comune;
 
-      cittaInput.value = comune.properties.comune;
+      cittaInput.value =
+        comune.properties.comune;
 
-      suggestions.innerHTML = '';
+      suggestions.innerHTML = "";
 
     });
 
@@ -70,114 +68,24 @@ cittaInput.addEventListener('input', function () {
 
 });
 
-// =========================
-// CALCOLO
-// =========================
-
 document
-  .getElementById('calcolaBtn')
-  .addEventListener('click', calcolaOroscopo);
-
-function calcolaOroscopo() {
-
-  try {
-
-    const data = document.getElementById('data').value;
-    const ora = document.getElementById('ora').value;
-    const nome = document.getElementById('nome').value;
-
-    if (!data || !ora) {
-
-      alert("Inserisci data e ora");
-      return;
-
-    }
+  .getElementById("calcolaBtn")
+  .addEventListener("click", function () {
 
     if (!comuneSelezionato) {
 
-      alert("Seleziona un comune dall'elenco");
+      alert("Seleziona un comune");
+
       return;
 
     }
 
-    loader.style.display = 'block';
-
-    const dataParts = data.split('-');
-
-    const anno = parseInt(dataParts[0]);
-    const mese = parseInt(dataParts[1]);
-    const giorno = parseInt(dataParts[2]);
-
-    const oraParts = ora.split(':');
-
-    const ore = parseInt(oraParts[0]);
-    const minuti = parseInt(oraParts[1]);
-
-    const latitudine =
-      comuneSelezionato.geometry.coordinates[1];
-
-    const longitudine =
-      comuneSelezionato.geometry.coordinates[0];
-
-    const origin = new Origin({
-
-      year: anno,
-      month: mese - 1,
-      date: giorno,
-
-      hour: ore,
-      minute: minuti,
-
-      latitude: latitudine,
-      longitude: longitudine
-
-    });
-
-    const horoscope = new Horoscope({
-
-      origin: origin,
-
-      houseSystem: "placidus",
-
-      zodiac: "tropical",
-
-      language: "en"
-
-    });
-
-    const segno =
-      horoscope?.SunSign?.label || "Non disponibile";
-
-    const ascendente =
-      horoscope?.Ascendant?.Sign?.label || "Non disponibile";
-
-    console.log("Horoscope:", horoscope);
-    console.log("Segno:", segno);
-    console.log("Ascendente:", ascendente);
-
     result.innerHTML =
-      '<div class="card">' +
-      '<h2>' + (nome || 'Utente') + '</h2>' +
-      '<p><strong>Segno:</strong> ' + segno + '</p>' +
-      '<p><strong>Ascendente:</strong> ' + ascendente + '</p>' +
-      '<p><strong>Comune:</strong> ' +
+      "<div class='card'>" +
+      "<h2>Test completato</h2>" +
+      "<p><strong>Comune:</strong> " +
       comuneSelezionato.properties.comune +
-      '</p>' +
-      '</div>';
+      "</p>" +
+      "</div>";
 
-    loader.style.display = 'none';
-
-  }
-  catch (err) {
-
-    loader.style.display = 'none';
-
-    console.error(err);
-
-    alert(
-      "Errore durante il calcolo. Controlla la console F12."
-    );
-
-  }
-
-}
+  });
