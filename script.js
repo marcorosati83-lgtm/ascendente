@@ -1,4 +1,7 @@
+```javascript
 import { Origin, Horoscope } from './astrology/src/index.js';
+
+console.log("Modulo astrologico caricato");
 
 let comuni = [];
 let comuneSelezionato = null;
@@ -14,13 +17,21 @@ const loader = document.getElementById('loader');
 // =========================
 
 fetch('./data/elenco_comuni_italiani_con_stemma.geojson')
-  .then(res => res.json())
+  .then(res => {
+    console.log("GeoJSON status:", res.status);
+    return res.json();
+  })
   .then(data => {
-    comuni = data.features;
+
+    comuni = data.features || [];
+
     console.log("Comuni caricati:", comuni.length);
+
   })
   .catch(err => {
+
     console.error("Errore caricamento GeoJSON", err);
+
   });
 
 
@@ -139,10 +150,14 @@ function calcolaOroscopo() {
     });
 
     const segno =
-      horoscope.SunSign.label;
+      horoscope?.SunSign?.label || "Non disponibile";
 
     const ascendente =
-      horoscope.Ascendant.Sign.label;
+      horoscope?.Ascendant?.Sign?.label || "Non disponibile";
+
+    console.log("Horoscope:", horoscope);
+    console.log("Segno:", segno);
+    console.log("Ascendente:", ascendente);
 
     result.innerHTML = `
 
@@ -163,8 +178,6 @@ function calcolaOroscopo() {
 
     loader.style.display = 'none';
 
-    console.log(horoscope);
-
   }
   catch(err) {
 
@@ -179,3 +192,4 @@ function calcolaOroscopo() {
   }
 
 }
+```
