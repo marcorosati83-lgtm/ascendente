@@ -1,4 +1,3 @@
-```javascript
 import { Origin, Horoscope } from './astrology/src/index.js';
 
 console.log("Modulo astrologico caricato");
@@ -11,35 +10,25 @@ const suggestions = document.getElementById('suggestions');
 const result = document.getElementById('result');
 const loader = document.getElementById('loader');
 
-
 // =========================
 // CARICAMENTO COMUNI
 // =========================
 
 fetch('./data/elenco_comuni_italiani_con_stemma.geojson')
-  .then(res => {
-    console.log("GeoJSON status:", res.status);
-    return res.json();
-  })
+  .then(res => res.json())
   .then(data => {
-
     comuni = data.features || [];
-
     console.log("Comuni caricati:", comuni.length);
-
   })
   .catch(err => {
-
     console.error("Errore caricamento GeoJSON", err);
-
   });
-
 
 // =========================
 // AUTOCOMPLETE COMUNI
 // =========================
 
-cittaInput.addEventListener('input', () => {
+cittaInput.addEventListener('input', function () {
 
   const testo = cittaInput.value.toLowerCase().trim();
 
@@ -48,20 +37,24 @@ cittaInput.addEventListener('input', () => {
   if (testo.length < 2) return;
 
   const risultati = comuni
-    .filter(c =>
-      c.properties.comune.toLowerCase().includes(testo)
-    )
+    .filter(function (c) {
+      return c.properties.comune.toLowerCase().includes(testo);
+    })
     .slice(0, 15);
 
-  risultati.forEach(comune => {
+  risultati.forEach(function (comune) {
 
     const div = document.createElement('div');
 
     div.className = 'suggestion-item';
 
-   div.textContent = `${comune.properties.comune} (${comune.properties.sigla})`;
+    div.textContent =
+      comune.properties.comune +
+      " (" +
+      comune.properties.sigla +
+      ")";
 
-    div.addEventListener('click', () => {
+    div.addEventListener('click', function () {
 
       comuneSelezionato = comune;
 
@@ -77,7 +70,6 @@ cittaInput.addEventListener('input', () => {
 
 });
 
-
 // =========================
 // CALCOLO
 // =========================
@@ -86,35 +78,40 @@ document
   .getElementById('calcolaBtn')
   .addEventListener('click', calcolaOroscopo);
 
-
 function calcolaOroscopo() {
 
   try {
 
     const data = document.getElementById('data').value;
     const ora = document.getElementById('ora').value;
+    const nome = document.getElementById('nome').value;
 
     if (!data || !ora) {
 
       alert("Inserisci data e ora");
-
       return;
+
     }
 
     if (!comuneSelezionato) {
 
-      alert("Seleziona un comune");
-
+      alert("Seleziona un comune dall'elenco");
       return;
+
     }
 
     loader.style.display = 'block';
 
-    const [anno, mese, giorno] =
-      data.split('-').map(Number);
+    const dataParts = data.split('-');
 
-    const [ore, minuti] =
-      ora.split(':').map(Number);
+    const anno = parseInt(dataParts[0]);
+    const mese = parseInt(dataParts[1]);
+    const giorno = parseInt(dataParts[2]);
+
+    const oraParts = ora.split(':');
+
+    const ore = parseInt(oraParts[0]);
+    const minuti = parseInt(oraParts[1]);
 
     const latitudine =
       comuneSelezionato.geometry.coordinates[1];
@@ -138,7 +135,7 @@ function calcolaOroscopo() {
 
     const horoscope = new Horoscope({
 
-      origin,
+      origin: origin,
 
       houseSystem: "placidus",
 
@@ -158,27 +155,20 @@ function calcolaOroscopo() {
     console.log("Segno:", segno);
     console.log("Ascendente:", ascendente);
 
-    result.innerHTML = `
-
-      <div class="card">
-
-        <h2>${document.getElementById('nome').value || 'Utente'}</h2>
-
-        <p><strong>Segno:</strong> ${segno}</p>
-
-        <p><strong>Ascendente:</strong> ${ascendente}</p>
-
-        <p><strong>Comune:</strong>
-        ${comuneSelezionato.properties.comune}</p>
-
-      </div>
-
-    `;
+    result.innerHTML =
+      '<div class="card">' +
+      '<h2>' + (nome || 'Utente') + '</h2>' +
+      '<p><strong>Segno:</strong> ' + segno + '</p>' +
+      '<p><strong>Ascendente:</strong> ' + ascendente + '</p>' +
+      '<p><strong>Comune:</strong> ' +
+      comuneSelezionato.properties.comune +
+      '</p>' +
+      '</div>';
 
     loader.style.display = 'none';
 
   }
-  catch(err) {
+  catch (err) {
 
     loader.style.display = 'none';
 
@@ -191,4 +181,3 @@ function calcolaOroscopo() {
   }
 
 }
-```
