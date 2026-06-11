@@ -2,22 +2,65 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Oroscopo x Acquario</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Calcolo Ascendente e Segno Zodiacale</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
 <div class="container">
-<h1>🔮 Oroscopo x Acquario</h1>
-<p>Build candidata con motore astrologico</p>
-<input id="nome" placeholder="Nome">
-<input id="data" type="date">
-<input id="ora" type="time">
-<input id="citta" placeholder="Comune">
-<div id="suggestions"></div>
-<button id="calcolaBtn">CALCOLA</button>
-<div id="result"></div>
+
+  <h1>🔮 Calcola il tuo Segno e Ascendente</h1>
+
+  <p class="subtitle">
+    Inserisci i tuoi dati di nascita
+  </p>
+
+  <input
+    type="text"
+    id="nome"
+    placeholder="Nome (facoltativo)"
+  >
+
+  <input
+    type="date"
+    id="data"
+  >
+
+  <input
+    type="time"
+    id="ora"
+  >
+
+  <div class="city-wrapper">
+
+    <input
+      type="text"
+      id="citta"
+      placeholder="Comune di nascita"
+      autocomplete="off"
+    >
+
+    <div id="suggestions"></div>
+
+  </div>
+
+  <button id="calcolaBtn">
+    ✨ CALCOLA
+  </button>
+
+  <div id="loader" style="display:none;">
+    Calcolo in corso...
+  </div>
+
+  <div id="result"></div>
+
 </div>
+
 <script type="module" src="script.js"></script>
+
 </body>
 </html>
