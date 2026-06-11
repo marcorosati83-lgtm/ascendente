@@ -439,13 +439,13 @@ async function loadCompressedScript() {
         const brotliLib = await loadBrotliLibrary();
         
         // Fetch compressed file as binary
-        const response = await fetch('astro-embedded.js.gz');
+        const response = await fetch('astro-embedded.js');
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         
         const compressedData = await response.arrayBuffer();
-        console.log(`📦 Loaded astro-embedded.js.gz (${compressedData.byteLength} bytes)`);
+        console.log(`📦 Loaded astro-embedded.js (${compressedData.byteLength} bytes)`);
         
         // Decompress using the library
         const decompressedData = await brotliLib.decompress(new Uint8Array(compressedData));
