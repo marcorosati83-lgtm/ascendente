@@ -1,3 +1,4 @@
+console.log("SWEPH CARICATO");
 /**
  * Swiss Ephemeris WebAssembly Calculator
  * 
