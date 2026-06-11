@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Oroscopo x Acquario - V2</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+<h1>🔮 Oroscopo x Acquario</h1>
+<p class="subtitle">Scopri il tuo segno zodiacale</p>
+
+<input id="nome" placeholder="Nome (facoltativo)">
+<input id="data" type="date">
+<input id="ora" type="time">
+<input id="citta" placeholder="Comune di nascita">
+<div id="suggestions"></div>
+
+<select id="ascendente">
+<option value="">Seleziona Ascendente</option>
+<option>Ariete ♈</option><option>Toro ♉</option><option>Gemelli ♊</option>
+<option>Cancro ♋</option><option>Leone ♌</option><option>Vergine ♍</option>
+<option>Bilancia ♎</option><option>Scorpione ♏</option><option>Sagittario ♐</option>
+<option>Capricorno ♑</option><option>Acquario ♒</option><option>Pesci ♓</option>
+</select>
+
+<button id="calcolaBtn">✨ CALCOLA</button>
+<div id="result"></div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
