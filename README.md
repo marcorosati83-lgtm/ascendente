@@ -1,2 +1,0 @@
-# ascendente
-Calcolo Ascendente
