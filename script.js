@@ -60,7 +60,7 @@ cittaInput.addEventListener('input', () => {
     div.className = 'suggestion-item';
 
     div.textContent =
-      `${comune.properties.comune} (${comune.properties.sigla})`;
+`${comune.properties.comune} (${comune.properties.sigla})`;
 
     div.addEventListener('click', () => {
 
